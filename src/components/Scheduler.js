@@ -1,14 +1,11 @@
-import React, { Component } from 'react';
-import { generateEventTimes } from '../services/schedulingService';
+import React, { Component } from "react";
+import { requestToBook } from "../services/schedulingService";
 
 class Scheduler extends Component {
   render() {
-    let times = generateEventTimes();
-    return (
-      <div>
-        
-      </div>
-    );
+    let b = requestToBook();
+    console.log(b);
+    return <div />;
   }
 }
 

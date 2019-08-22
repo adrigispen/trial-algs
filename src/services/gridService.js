@@ -1,81 +1,50 @@
 function generateTestGrids() {
-  // let grids = [];
-  // for (let i = 0; i < 10; i++) {
-  //   let m = parseInt(Math.random() * 10) + 1; // we want at least 2 elems in each row
-  //   let n = parseInt(Math.random() * 10) + 1; // and at least 2 in each col
-  //   let grid = [];
-  //   for (let j = 0; j < m; j++) {
-  //     let temp = [];
-  //     for (let k = 0; k < n; k++) {
-  //       temp[k] = { val: Math.random() * 10 < 8 ? "o" : "x", count: 0 };
-  //     }
-  //     grid[j] = temp;
-  //   }
-  //   grids.push(getSizedGrid(grid));
-  // }
-  // console.log(grids);
+  let grids = [];
+  for (let i = 0; i < 10; i++) {
+    let m = parseInt(Math.random() * 10) + 1; // we want at least 2 elems in each row
+    let n = parseInt(Math.random() * 10) + 1; // and at least 2 in each col
+    let grid = [];
+    for (let j = 0; j < m; j++) {
+      let temp = [];
+      for (let k = 0; k < n; k++) {
+        temp[k] = { val: Math.random() * 10 < 8 ? "o" : "x", count: 0 };
+      }
+      grid[j] = temp;
+    }
+    //grids.push(getSizedGrid(grid));
+    grids.push({ grid: grid, size: getMaxSize(grid) });
+  }
   //let grids = getSizedGrid(grid);
 
   //return [grids];
-  return [];
+  return grids;
 }
-
-let g = [
-  ["o", "o", "o", "o", "o", "o"],
-  ["o", "o", "o", "o", "o", "o"],
-  ["o", "o", "o", "x", "o", "o"],
-  ["o", "o", "o", "o", "o", "o"],
-  ["o", "o", "o", "o", "o", "o"],
-  ["o", "o", "o", "o", "o", "o"]
-];
-
-console.log("HEY THIS IS MAX SIZE SHOULD BE 6", getMaxSize(g));
 
 function getMaxSize(grid) {
   let max = 0;
   for (let i = 0; i < grid.length; i++) {
     for (let j = 0; j < grid[i].length; j++) {
-      let s = countSize(grid, i, j);
-      if (s > max) max = s;
+      if (countSize(grid, i, j) > max) max = countSize(grid, i, j);
     }
   }
-  console.log(max);
+  console.log("I'M here and max is ", max);
   return max;
 }
 
 function countSize(grid, i, j) {
-  console.log(grid);
-  let e = grid[i][j];
-  if (e == "x") {
-    return 0;
-  } else {
-    let size = 1;
-    for (let len = 1; len <= Math.min(grid.length, grid[i].length); len++) {
-      if (surroundingsIncludeXs(grid, i, j, len)) {
-        console.log("here, surroundings include xs");
-        return size;
-      } else {
-        size++;
-      }
-    }
-    return size;
-  }
-}
-
-function surroundingsIncludeXs(grid, i, j, len) {
-  let result = true;
-  for (let m = i; m <= i + len; m++) {
-    if (m >= grid.length) continue;
-    console.log("m equals ", m);
-    for (let n = j; n <= j + len; n++) {
-      if (n >= grid[i].length) continue;
-      if (grid[m][n] === "x") {
-        result = true;
-        break;
-      }
+  console.log("here in count size, grid[i][j] = ", grid[i][j].val);
+  if (grid[i][j].val === "x") return 0;
+  let size = 1;
+  for (let l = 1; l <= Math.min(grid.length, grid[i].length); l++) {
+    if (surroundingsIncludeXs(grid, i, j, l)) {
+      console.log("I found an x at length ", l);
+      size = l;
+      break;
+    } else {
+      size++;
     }
   }
-  return result;
+  return size;
 }
 
 let grid = [
@@ -183,6 +152,16 @@ function countSurroundingOs(grid) {
     }
   }
   return grid;
+}
+
+function surroundingsIncludeXs(grid, i, j, len) {
+  for (let m = i; m <= i + len; m++) {
+    for (let n = j; n <= j + len; n++) {
+      if (n >= grid[i].length || m >= grid.length) return true;
+      if (grid[m][n].val === "x") return true;
+    }
+  }
+  return false;
 }
 
 export { generateTestGrids };

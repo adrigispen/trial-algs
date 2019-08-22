@@ -9,7 +9,6 @@ class Grid extends Component {
       <div className="container">
         {grids.map((el, index) => (
           <div key={index} className="gridContainer">
-            <h1>Size: {el.size}</h1>
             <ul>
               {el.grid.map((e, i) => (
                 <li key={i}>
