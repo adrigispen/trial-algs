@@ -9,18 +9,20 @@ class Grid extends Component {
       <div className="container">
         {grids.map((el, index) => (
           <div key={index} className="gridContainer">
+            <p>
+              Max square: {el.size.max}
+              <br />
+              Top left at ({el.size.maxi}, {el.size.maxj})
+            </p>
             <ul>
               {el.grid.map((e, i) => (
-                <li key={i}>
+                <div key={i} className="row">
                   {e.map((ee, ii) => (
-                    <span
-                      key={ii}
-                      className={(ee.count === el.size).toString()}
-                    >
-                      {ee.val}
-                    </span>
+                    <div key={ii} className="cell">
+                      {ee}
+                    </div>
                   ))}
-                </li>
+                </div>
               ))}
             </ul>
           </div>

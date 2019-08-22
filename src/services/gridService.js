@@ -7,7 +7,7 @@ function generateTestGrids() {
     for (let j = 0; j < m; j++) {
       let temp = [];
       for (let k = 0; k < n; k++) {
-        temp[k] = { val: Math.random() * 10 < 8 ? "o" : "x", count: 0 };
+        temp[k] = Math.random() * 10 < 8 ? "o" : "x";
       }
       grid[j] = temp;
     }
@@ -18,19 +18,26 @@ function generateTestGrids() {
 
 function getMaxSize(grid) {
   let max = 0;
+  let maxi = 0;
+  let maxj = 0;
   for (let i = 0; i < grid.length; i++) {
     for (let j = 0; j < grid[i].length; j++) {
-      if (countSize(grid, i, j) > max) max = countSize(grid, i, j);
+      if (countSize(grid, i, j) > max) {
+        max = countSize(grid, i, j);
+        maxi = i;
+        maxj = j;
+      }
     }
   }
-  return max;
+  return { max, maxi, maxj };
 }
 
 function countSize(grid, i, j) {
-  if (grid[i][j].val === "x") return 0;
+  if (grid[i][j] === "x") return 0;
   let size = 1;
   for (let l = 1; l <= Math.min(grid.length, grid[i].length); l++) {
-    if (surroundingsIncludeXs(grid, i, j, l)) {
+    // I could do a calculation to get an accurate upper bound, but it doesn't matter because we'll always hit a boundary
+    if (hitBoundaryOrX(grid, i, j, l)) {
       size = l;
       break;
     } else {
@@ -40,121 +47,14 @@ function countSize(grid, i, j) {
   return size;
 }
 
-function surroundingsIncludeXs(grid, i, j, len) {
+function hitBoundaryOrX(grid, i, j, len) {
   for (let m = i; m <= i + len; m++) {
     for (let n = j; n <= j + len; n++) {
       if (n >= grid[i].length || m >= grid.length) return true;
-      if (grid[m][n].val === "x") return true;
+      if (grid[m][n] === "x") return true;
     }
   }
   return false;
 }
-
-let grid = [
-  [
-    { val: "o", count: 1 },
-    { val: "o", count: 1 },
-    { val: "o", count: 1 },
-    { val: "o", count: 1 },
-    { val: "o", count: 1 },
-    { val: "o", count: 1 },
-    { val: "x", count: 0 },
-    { val: "o", count: 1 }
-  ],
-  [
-    { val: "o", count: 1 },
-    { val: "o", count: 1 },
-    { val: "o", count: 1 },
-    { val: "o", count: 1 },
-    { val: "o", count: 1 },
-    { val: "o", count: 1 },
-    { val: "x", count: 0 },
-    { val: "o", count: 1 }
-  ],
-  [
-    { val: "o", count: 1 },
-    { val: "o", count: 1 },
-    { val: "o", count: 1 },
-    { val: "o", count: 1 },
-    { val: "o", count: 1 },
-    { val: "o", count: 1 },
-    { val: "x", count: 0 },
-    { val: "o", count: 1 }
-  ],
-  [
-    { val: "o", count: 1 },
-    { val: "o", count: 1 },
-    { val: "o", count: 1 },
-    { val: "o", count: 1 },
-    { val: "o", count: 1 },
-    { val: "o", count: 1 },
-    { val: "x", count: 0 },
-    { val: "o", count: 1 }
-  ],
-  [
-    { val: "o", count: 1 },
-    { val: "o", count: 1 },
-    { val: "o", count: 1 },
-    { val: "o", count: 1 },
-    { val: "o", count: 1 },
-    { val: "o", count: 1 },
-    { val: "x", count: 0 },
-    { val: "o", count: 1 }
-  ],
-  [
-    { val: "o", count: 1 },
-    { val: "o", count: 1 },
-    { val: "o", count: 1 },
-    { val: "o", count: 1 },
-    { val: "o", count: 1 },
-    { val: "o", count: 1 },
-    { val: "x", count: 0 },
-    { val: "o", count: 1 }
-  ]
-];
-
-// function getSizedGrid(grid) {
-//   let l = -1;
-//   while (l !== getSize(grid)) {
-//     l = getSize(grid);
-//   }
-//   return { grid: grid, size: l };
-// }
-
-// function getSize(grid) {
-//   return countSurroundingOs(grid).reduce(
-//     (acc, cv) =>
-//       acc > Math.max(...cv.map(el => el.count))
-//         ? acc
-//         : Math.max(...cv.map(el => el.count)),
-//     0
-//   );
-// }
-
-// function countSurroundingOs(grid) {
-//   for (let i = 0; i < grid.length; i++) {
-//     for (let j = 0; j < grid[i].length; j++) {
-//       let square = grid[i][j];
-//       let len = square.count;
-//       if (square.val === "x") {
-//         // do nothing
-//       } else {
-//         if (
-//           !(
-//             i - len < 0 ||
-//             i + len >= grid.length ||
-//             j - len < 0 ||
-//             j + len >= grid[i].length
-//           ) &&
-//           !surroundingsIncludeXs(grid, i, j, len)
-//         ) {
-//           len += 1;
-//           grid[i][j] = { val: square.val, count: len };
-//         }
-//       }
-//     }
-//   }
-//   return grid;
-// }
 
 export { generateTestGrids };

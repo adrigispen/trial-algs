@@ -1,3 +1,4 @@
+// test data + generator
 let bookedEvents = [
   {
     start: 1,
@@ -40,36 +41,6 @@ let bookings = [
   [2.5, 4]
 ].map(el => ({ start: el[0], end: el[1] }));
 
-// returns those bookings that CAN be scheduled
-function requestToBook() {
-  let booked = [...bookings];
-  let requests = generateRequests(10, 2); // wanted to test a bit more - so I'm generating these, but they can overlap
-  console.log("original bookings: ", bookings);
-  console.log("randomly generated requests: ", requests);
-  let results = [];
-  // goes through requests - first one that can fit into the bookings is added.
-  // requests.reduce(acc, cv) //change for loop to reduce
-  for (let i = 0; i < requests.length; i++) {
-    let request = requests[i];
-    if (
-      booked.reduce((acc, booking) => acc && !overlaps(request, booking), true)
-    ) {
-      booked.push(request);
-      results.push(request);
-    }
-  }
-  console.log("requests that could be filled: ", results);
-  console.log("all bookings: ", booked.sort((a, b) => a.start - b.start));
-  return results;
-}
-
-function overlaps(request, booking) {
-  return (
-    (request.start > booking.start && request.start < booking.end) ||
-    (request.end > booking.start && request.end < booking.end)
-  );
-}
-
 function generateRequests(count, duration) {
   let requests = [];
   for (let i = 0; i < count; i++) {
@@ -78,6 +49,37 @@ function generateRequests(count, duration) {
     requests.push({ start: start, end: end });
   }
   return requests;
+}
+
+// functions
+// returns all bookings that fit on the schedule
+function requestToBook() {
+  let booked = [...bookings];
+  let requests = generateRequests(10, 4); // wanted to test a bit more - so I'm generating these, but they can overlap
+  console.log("original bookings: ", bookings);
+  console.log("randomly generated requests: ", requests);
+  let allBookings = requests
+    .reduce((results, request) => {
+      if (
+        booked.reduce((acc, booking) => acc && !overlap(request, booking), true)
+      ) {
+        results.push(request);
+      }
+      return results;
+    }, booked)
+    .sort((a, b) => a.start - b.start);
+  console.log("all bookings: ", allBookings);
+  return allBookings;
+}
+
+// this still doesn't account for all cases; what if they're exactly equal, what if the start or end time is exactly the same... probably also other cases, but these other 2 were easy to add
+function overlap(request, booking) {
+  return (
+    (request.start > booking.start && request.start < booking.end) ||
+    (request.end > booking.start && request.end < booking.end) ||
+    (request.start < booking.start && request.end > booking.end) ||
+    (booking.start < request.start && booking.end > request.end)
+  );
 }
 
 export { requestToBook };

@@ -1,5 +1,8 @@
 .App {
-  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 .container {
@@ -12,16 +15,26 @@
 }
 
 .gridContainer {
-  width: 20%;
+  width: 33%;
+  height: 200px;
 }
 
-li {
-  list-style-type: none;
+ul {
+  margin: 0;
+  padding: 0;
 }
 
-span {
-  width: 5px;
-  height: 5px;
+.row {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.cell {
+  width: 10px;
+  height: 10px;
 }
 
 .highlight {
