@@ -23,17 +23,14 @@ function getMaxSize(grid) {
       if (countSize(grid, i, j) > max) max = countSize(grid, i, j);
     }
   }
-  console.log("I'M here and max is ", max);
   return max;
 }
 
 function countSize(grid, i, j) {
-  console.log("here in count size, grid[i][j] = ", grid[i][j].val);
   if (grid[i][j].val === "x") return 0;
   let size = 1;
   for (let l = 1; l <= Math.min(grid.length, grid[i].length); l++) {
     if (surroundingsIncludeXs(grid, i, j, l)) {
-      console.log("I found an x at length ", l);
       size = l;
       break;
     } else {
