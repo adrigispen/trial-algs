@@ -72,7 +72,7 @@ function requestToBook() {
   return allBookings;
 }
 
-// this still doesn't account for all cases; what if they're exactly equal, what if the start or end time is exactly the same... probably also other cases, but these other 2 were easy to add
+// this still doesn't account for all cases; what if they're exactly equal, what if the start or end time is exactly the same... probably also other cases. Just added the two cases to check if request is fully contained within booking or vice versa
 function overlap(request, booking) {
   return (
     (request.start > booking.start && request.start < booking.end) ||
