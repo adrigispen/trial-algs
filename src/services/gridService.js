@@ -1,8 +1,8 @@
 function generateTestGrids() {
   let grids = [];
   for (let i = 0; i < 10; i++) {
-    let m = parseInt(Math.random() * 10) + 1; // we want at least 2 elems in each row
-    let n = parseInt(Math.random() * 10) + 1; // and at least 2 in each col
+    let m = parseInt(Math.random() * 10) + 1; // we want at least 1 elem in each row
+    let n = parseInt(Math.random() * 10) + 1; // and at least 1 in each col
     let grid = [];
     for (let j = 0; j < m; j++) {
       let temp = [];
@@ -11,12 +11,8 @@ function generateTestGrids() {
       }
       grid[j] = temp;
     }
-    //grids.push(getSizedGrid(grid));
     grids.push({ grid: grid, size: getMaxSize(grid) });
   }
-  //let grids = getSizedGrid(grid);
-
-  //return [grids];
   return grids;
 }
 
@@ -45,6 +41,16 @@ function countSize(grid, i, j) {
     }
   }
   return size;
+}
+
+function surroundingsIncludeXs(grid, i, j, len) {
+  for (let m = i; m <= i + len; m++) {
+    for (let n = j; n <= j + len; n++) {
+      if (n >= grid[i].length || m >= grid.length) return true;
+      if (grid[m][n].val === "x") return true;
+    }
+  }
+  return false;
 }
 
 let grid = [
@@ -110,58 +116,48 @@ let grid = [
   ]
 ];
 
-function getSizedGrid(grid) {
-  let l = -1;
-  while (l !== getSize(grid)) {
-    l = getSize(grid);
-  }
-  return { grid: grid, size: l };
-}
+// function getSizedGrid(grid) {
+//   let l = -1;
+//   while (l !== getSize(grid)) {
+//     l = getSize(grid);
+//   }
+//   return { grid: grid, size: l };
+// }
 
-function getSize(grid) {
-  return countSurroundingOs(grid).reduce(
-    (acc, cv) =>
-      acc > Math.max(...cv.map(el => el.count))
-        ? acc
-        : Math.max(...cv.map(el => el.count)),
-    0
-  );
-}
+// function getSize(grid) {
+//   return countSurroundingOs(grid).reduce(
+//     (acc, cv) =>
+//       acc > Math.max(...cv.map(el => el.count))
+//         ? acc
+//         : Math.max(...cv.map(el => el.count)),
+//     0
+//   );
+// }
 
-function countSurroundingOs(grid) {
-  for (let i = 0; i < grid.length; i++) {
-    for (let j = 0; j < grid[i].length; j++) {
-      let square = grid[i][j];
-      let len = square.count;
-      if (square.val === "x") {
-        // do nothing
-      } else {
-        if (
-          !(
-            i - len < 0 ||
-            i + len >= grid.length ||
-            j - len < 0 ||
-            j + len >= grid[i].length
-          ) &&
-          !surroundingsIncludeXs(grid, i, j, len)
-        ) {
-          len += 1;
-          grid[i][j] = { val: square.val, count: len };
-        }
-      }
-    }
-  }
-  return grid;
-}
-
-function surroundingsIncludeXs(grid, i, j, len) {
-  for (let m = i; m <= i + len; m++) {
-    for (let n = j; n <= j + len; n++) {
-      if (n >= grid[i].length || m >= grid.length) return true;
-      if (grid[m][n].val === "x") return true;
-    }
-  }
-  return false;
-}
+// function countSurroundingOs(grid) {
+//   for (let i = 0; i < grid.length; i++) {
+//     for (let j = 0; j < grid[i].length; j++) {
+//       let square = grid[i][j];
+//       let len = square.count;
+//       if (square.val === "x") {
+//         // do nothing
+//       } else {
+//         if (
+//           !(
+//             i - len < 0 ||
+//             i + len >= grid.length ||
+//             j - len < 0 ||
+//             j + len >= grid[i].length
+//           ) &&
+//           !surroundingsIncludeXs(grid, i, j, len)
+//         ) {
+//           len += 1;
+//           grid[i][j] = { val: square.val, count: len };
+//         }
+//       }
+//     }
+//   }
+//   return grid;
+// }
 
 export { generateTestGrids };
