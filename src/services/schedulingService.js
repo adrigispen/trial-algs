@@ -42,12 +42,13 @@ let bookings = [
 
 // returns those bookings that CAN be scheduled
 function requestToBook() {
-  let booked = bookings;
-  console.log(booked);
-  let requests = generateRequests(10); // wanted to test a bit more - so I'm generating these, but they can overlap
-  console.log(requests);
+  let booked = [...bookings];
+  let requests = generateRequests(10, 2); // wanted to test a bit more - so I'm generating these, but they can overlap
+  console.log("original bookings: ", bookings);
+  console.log("randomly generated requests: ", requests);
   let results = [];
   // goes through requests - first one that can fit into the bookings is added.
+  // requests.reduce(acc, cv) //change for loop to reduce
   for (let i = 0; i < requests.length; i++) {
     let request = requests[i];
     if (
@@ -57,8 +58,8 @@ function requestToBook() {
       results.push(request);
     }
   }
-  console.log(results);
-  console.log(booked.sort((a, b) => a.start - b.start));
+  console.log("requests that could be filled: ", results);
+  console.log("all bookings: ", booked.sort((a, b) => a.start - b.start));
   return results;
 }
 
@@ -69,11 +70,11 @@ function overlaps(request, booking) {
   );
 }
 
-function generateRequests(count) {
+function generateRequests(count, duration) {
   let requests = [];
   for (let i = 0; i < count; i++) {
-    let start = Math.random() * 22;
-    let end = start + 1;
+    let start = Math.random() * (24 - duration);
+    let end = start + duration;
     requests.push({ start: start, end: end });
   }
   return requests;
